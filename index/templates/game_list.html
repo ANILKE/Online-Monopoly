@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game List</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Game List</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Game Name</th>
+                    <th>Join</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for game in games %}
+                <tr>
+                    <td>{{game.id}}- {{ game.name }} </td>
+                    <td>
+                        <form action="/ready-player" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary"  name='id' value ={{game.id}}>Join</button>
+                        </form>
+                    </td>
+                </tr>
+                
+                {% endfor %}
+            </tbody>
+            
+        </table>
+        <form action="go-back" method="POST">
+            {% csrf_token %}
+    
+            <button type="submit" class="btn btn-primary">GO BACK</button>
+            
+        </form>
+    </div>
+    
+</body>
+</html>

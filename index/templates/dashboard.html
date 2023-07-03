@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monopoly Game</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    
+    .container {
+      text-align: center;
+    }
+    
+    .btn {
+      margin-bottom: 20px;
+      width: 200px;
+    }
+
+    .logout-button {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Monopoly Game</h1>
+    <form action="/list-games" method="GET">
+      <button type="submit" class="btn btn-primary">List Games</button>
+    </form>
+      {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+      {% endif %}
+      
+
+    <form method="POST">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-success">Create Game</button>
+    </form>
+  </div>
+  <a href="#" class="btn btn-primary logout-button" id="logout-button">Logout</a>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#logout-button').click(function(e) {
+        e.preventDefault();
+    
+        // Make an AJAX request to log out
+        $.ajax({
+          url: "{% url 'logout' %}",
+          type: "POST",
+          dataType: "json",
+          data: {
+            csrfmiddlewaretoken: "{{ csrf_token }}"
+          },
+          success: function(response) {
+            // Redirect to the login page or perform any other action
+            window.location.href = "{% url 'login' %}";
+          },
+          error: function(xhr, errmsg, err) {
+            // Handle the error response
+            console.log(xhr.status + ": " + xhr.responseText);
+          }
+        });
+      });
+    });
+    </script>
+    
+
+</body>
+
+</html>

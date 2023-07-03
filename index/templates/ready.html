@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Player Ready</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Are you ready?</h1>
+        
+        <form  method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary" name ='id' value ='99999'>Ready</button>
+        </form>
+        
+        <a href="#" class="btn btn-secondary">Not Ready</a>
+    </div>
+</body>
+</html>

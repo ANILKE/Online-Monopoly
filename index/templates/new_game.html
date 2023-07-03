@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Monopoly Game</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 600;
+        }
+
+        .game-name-input {
+            width: 400px;
+        }
+
+        .city-info-group {
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-gap: 10px;
+        }
+
+        .city-info-group label {
+            display: block;
+        }
+
+        .city-info-group input,
+        .city-info-group select {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Create Monopoly Game</h1>
+        
+
+        {% if auth %}
+            <form action="{% url 'create-game' %}" method="POST">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="gameName">Game Name:</label>
+                    <input type="text" class="form-control game-name-input" id="gameName" name="gameName" required>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="JoinableUsers">Joinable Users:</label>
+                    <input type="text" class="form-control game-name-input" id="users" name="users" placeholder="e.g., username1, username2, username3">
+                </div>
+
+                <select class="form-control" id="share_status" name="share_status" required>
+                    <option value="all">Public</option>
+                    <option value="authenticated">Private</option>
+                    <option value="owner">Owner Private</option>
+                </select>
+                
+
+                <h3>City Information:</h3>
+
+                {% for i in city_size %}
+                    <div class="city-info-group">
+                        <div>
+                            <label for="cityName{{ i }}">City Name :</label>
+                            <input type="text" class="form-control" id="cityName{{ i }}" name="cityName{{ i }}" required>
+                        </div>
+
+                        <div>
+                            <label for="cityColor{{ i }}">Color:</label>
+                            <select class="form-control" id="cityColor{{ i }}" name="cityColor{{ i }}" required>
+                                <option value="brown">Brown</option>
+                                <option value="light-blue">Light Blue</option>
+                                <option value="pink">Pink</option>
+                                <option value="orange">Orange</option>
+                                <option value="red">Red</option>
+                                <option value="yellow">Yellow</option>
+                                <option value="green">Green</option>
+                                <option value="dark-blue">Dark Blue</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="cityBuyPrice{{ i }}">Buy Price:</label>
+                            <input type="number" class="form-control" id="cityBuyPrice{{ i }}" name="cityBuyPrice{{ i }}" required>
+                        </div>
+                        
+                        <div>
+                            <label for="cityLevelPrices{{ i }}">Level Prices:</label>
+                            <input type="text" class="form-control" id="cityLevelPrices{{ i }}" name="cityLevelPrices{{ i }}" required>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-primary">Create Game</button>
+            </form>
+        {% else %}
+            <p>You need to be logged in to create a game.</p>
+        {% endif %}
+
+        <form action="{% url '/go-back' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">GO BACK</button>
+        </form>
+    </div>
+    <script>
+        // Get references to the necessary elements
+        const shareStatusSelect = document.getElementById('share_status');
+        const joinableUsersField = document.getElementById('users');
+    
+        // Add an event listener to the "share_status" select element
+        shareStatusSelect.addEventListener('change', function() {
+            // Check the selected value
+            if (shareStatusSelect.value === 'owner') {
+                // Show the "Joinable Users" field
+                joinableUsersField.style.display = 'block';
+            } else {
+                // Hide the "Joinable Users" field
+                joinableUsersField.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
